@@ -1,0 +1,16 @@
+Speaker ID: Guest-1
+Original Text: What's your interest in it, Mr. Wang?
+Translated Text: What's your interest in it, Mr. Wang?
+
+Speaker ID: Guest-2
+Original Text: I want to borrow it for spelunking.
+Translated Text: I want to borrow it for spelunking.
+
+Speaker ID: Guest-2
+Original Text: It's belonging, yeah, you know, cave diving.
+Translated Text: It's belonging, yeah, you know, cave diving.
+
+Speaker ID: Guest-1
+Original Text: Expecting to run into much gunfire in these caves.
+Translated Text: Expecting to run into much gunfire in these caves.
+

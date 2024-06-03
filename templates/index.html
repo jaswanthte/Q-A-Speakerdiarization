@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Question Answering</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            height: calc(100vh - 50px);
+        }
+        .left, .right {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="file"], button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        #processing {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        #output {
+            margin-top: 20px;
+            background-color: #f4f4f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: calc(100% - 40px);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Document Question Answering</div>
+    <div class="container">
+        <div class="left">
+            <div class="box">
+                <h2>Ask a Question</h2>
+                <form id="question-form" enctype="multipart/form-data">
+                    <label for="question">Question:</label>
+                    <input type="text" id="question" name="question" required>
+                    <label for="file">Upload a text file:</label>
+                    <input type="file" id="file" name="file" accept=".txt" required>
+                    <button type="submit">Submit</button>
+                </form>
+                <div id="processing" class="hidden">Processing...</div>
+            </div>
+        </div>
+        <div class="right">
+            <div id="output" class="hidden">
+                <h2>Answer:</h2>
+                <p id="answer-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('question-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('question', document.getElementById('question').value);
+            formData.append('file', document.getElementById('file').files[0]);
+
+            document.getElementById("processing").classList.remove("hidden");
+            document.getElementById("output").classList.add("hidden");
+
+            fetch('/ask', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("processing").classList.add("hidden");
+                if (data.answer) {
+                    document.getElementById('answer-text').innerText = data.answer;
+                    document.getElementById('output').classList.remove("hidden");
+                } else if (data.error) {
+                    document.getElementById('answer-text').innerText = "Error: " + data.error;
+                    document.getElementById('output').classList.remove("hidden");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while processing your question.");
+                document.getElementById("processing").classList.add("hidden");
+            });
+        });
+    </script>
+</body>
+</html>
